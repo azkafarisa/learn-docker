@@ -1,5 +1,12 @@
-FROM golang:1.17-alpine
+FROM golang:1.17-alpine as builder
+WORKDIR /app
+ADD . /app
+RUN cd /app && go build -o hello
 
-COPY main.go /app/main.go
+FROM alpine
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+WORKDIR /app
+COPY --from=builder /app/hello /app
+EXPOSE 4000
+ENTRYPOINT ./hello
 
-CMD ["go", "run", "/app/main.go"]
