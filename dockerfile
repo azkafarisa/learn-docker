@@ -1,12 +1,6 @@
-FROM golang:1.17-alpine as builder
+FROM golang:1.17-alpine
+RUN mkdir /app
+COPY . /app
 WORKDIR /app
-ADD . /app
-RUN cd /app && go build -o hello
-
-FROM alpine
-RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
-WORKDIR /app
-COPY --from=builder /app/hello /app
-EXPOSE 4000
-ENTRYPOINT ./hello
-
+RUN go build -o learn-docker .
+CMD ["/app/main"]

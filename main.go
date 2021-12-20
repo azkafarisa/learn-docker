@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
-func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World!")
-	})
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Fuck!")
+}
 
-	http.ListenAndServe(":4000", nil)
+func main() {
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe("0.0.0.0:4000", nil))
 }
